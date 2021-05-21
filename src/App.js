@@ -20,7 +20,7 @@ class App extends React.Component {
   addLocation = async (event) => {
     event.preventDefault()
 
-    let cityUrl = `https://eu1.locationiq.com/v1/search.php?key=k.b6a748ac44a34b8c21ca66ba80183eed&q=${this.state.searchInfo}n&format=json`
+    let cityUrl = `https://eu1.locationiq.com/v1/search.php?key=pk.b6a748ac44a34b8c21ca66ba80183eed&q=${this.state.searchInfo}n&format=json`
 
     try {
       let cityResult = await axios.get(cityUrl);
