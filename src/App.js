@@ -67,8 +67,33 @@ class App extends React.Component {
       })
           
     }
-    
+
+    try {
+      console.log(serverRoute);
+      const movieUrl = `${serverRoute}/movie?city_name=${this.state.searchQuery}`;
+
+      const movieData = await axios.get(movieUrl);
+      // console.log(movieData.data);
+
+
+      this.setState({
+        movieArr: movieData.data,
+        showMovie: true
+      })
+      console.log(this.state.movieArr)
+    }
+    catch (errors) {
+      // console.log(errors);
+      this.setState({
+
+        showMovie: false
+      })
+      console.log('error from move')
+    }
+
   }
+    
+  
   
   
  
