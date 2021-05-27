@@ -1,3 +1,5 @@
+
+
 import React from "react";
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
@@ -13,14 +15,17 @@ class App extends React.Component {
       searchInfo: '',
       cityData: '',
       showMap: false,
-      errorData: false
+      errorData: false,
+        forecastArrFront: [],
+       showWeather: false
     }
 
   }
   addLocation = async (event) => {
     event.preventDefault()
+     let serverRoute = process.env.REACT_APP_SERVER;
 
-    let cityUrl = `https://eu1.locationiq.com/v1/search.php?key=pk.b6a748ac44a34b8c21ca66ba80183eed&q=${this.state.searchInfo}n&format=json`
+    let cityUrl = `https://eu1.locationiq.com/v1/search.php?key=pk.b6a748ac44a34b8c21ca66ba80183eed&q=${this.state.searchInfo}&format=json`
 
     try {
       let cityResult = await axios.get(cityUrl);
@@ -39,23 +44,48 @@ class App extends React.Component {
     
       })
     }
- }
+ 
+
+   try {
+      console.log(serverRoute);
+      const url = `${serverRoute}weather?city_name=${this.state.searchInfo}`;
+       
+      const weatherData = await axios.get(url);
+      console.log(weatherData.data);
+
+
+      this.setState({
+        forecastArrFront: weatherData.data,
+        showWeather: true
+      })
+    }
+    catch (errors) {
+      // console.log(errors);
+      this.setState({
+
+        showWeather: false
+      })
+          
+    }
+    
+  }
+  
   
  
   
  
 
-searchData = (event) => {
+ searchData = (event) => {
   this.setState({
     searchInfo: event.target.value
 
   })
   console.log(this.state.searchInfo);
-}
+ }
 
-render(){
-  return (
-    <>
+  render(){
+     return (
+    <> 
       <h1>City Explorer</h1>
       <Form onSubmit={this.addLocation}>
           <Form.Group controlId="formBasicEmail">
@@ -72,7 +102,7 @@ render(){
       {this.state.showMap &&
         
         <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=pk.b6a748ac44a34b8c21ca66ba80183eed&center=${this.state.cityData.lat},${this.state.cityData.lon}`} />
+        <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=pk.8a6d5abe582c530444a1a198f0341145&q=${this.state.cityData.lat} ${this.state.cityData.lon}`} />
         <Card.Body>
           <Card.Title>{this.state.cityData.display_name}</Card.Title>
           <Card.Text>
@@ -82,16 +112,27 @@ render(){
         </Card.Body>
       </Card>
 
-        
-      }
-       {this.state.errorData &&
+        }
+      
+       { this.state.errorData &&
+       
        <Alert variant="danger">
        error in getting the data
-     </Alert>
+       </Alert>
         
-      } 
+        } 
+
+      
+       { this.state.forecastArrFront.map((item, idx) => {
+         
+         return <p key={idx}>{item.date} and {item.description}</p>
+
+        }) }
+        <p>{this.state.item}</p>
+
+
     </>
-  )
-}
+   )
+  }
 }
 export default App;
