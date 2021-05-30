@@ -16,7 +16,7 @@ class App extends React.Component {
       cityData: '',
       showMap: false,
       errorData: false,
-        forecastArrFront: [],
+        weatherArray: [],
        showWeather: false
     }
 
@@ -48,19 +48,20 @@ class App extends React.Component {
 
    try {
       console.log(serverRoute);
-      const url = `${serverRoute}weather?city_name=${this.state.searchInfo}`;
+      const url = `${serverRoute}/weather?city_name=${this.state.searchInfo}`;
        
       const weatherData = await axios.get(url);
-      console.log(weatherData.data);
+      console.log('"hello"', weatherData.data);
 
 
       this.setState({
-        forecastArrFront: weatherData.data,
+        weatherArray: weatherData.data,
         showWeather: true
       })
+      console.log(weatherData)
     }
     catch (errors) {
-      // console.log(errors);
+      console.log(errors);
       this.setState({
 
         showWeather: false
@@ -68,28 +69,7 @@ class App extends React.Component {
           
     }
 
-    try {
-      console.log(serverRoute);
-      const movieUrl = `${serverRoute}/movie?city_name=${this.state.searchQuery}`;
-
-      const movieData = await axios.get(movieUrl);
-      // console.log(movieData.data);
-
-
-      this.setState({
-        movieArr: movieData.data,
-        showMovie: true
-      })
-      console.log(this.state.movieArr)
-    }
-    catch (errors) {
-      // console.log(errors);
-      this.setState({
-
-        showMovie: false
-      })
-      console.log('error from move')
-    }
+   
 
   }
     
@@ -148,11 +128,13 @@ class App extends React.Component {
         } 
 
       
-       { this.state.forecastArrFront.map((item, idx) => {
+       { this.state.weatherArray.map((item, idx) => {
          
-         return <p key={idx}>{item.date} and {item.description}</p>
+         return <p key={idx}>{item.date} and {item.descreption}</p>
 
         }) }
+              
+
         <p>{this.state.item}</p>
 
 
